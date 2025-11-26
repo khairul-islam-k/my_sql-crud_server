@@ -31,7 +31,7 @@ app.get("/users", (req, res) => {
 
 app.get("/user/:roll", (req, res) => {
   const Roll = req.params.roll;
-  
+
   const sql = `SELECT * FROM students
   WHERE Roll = ?`;
   db.query(sql, [Roll], (error, result) => {
@@ -40,6 +40,26 @@ app.get("/user/:roll", (req, res) => {
     }
     res.send(result);
   })
+})
+
+app.post("/table", (req, res) => {
+  const sql = `CREATE TABLE students
+  (
+  Roll int AUTO_INCREMENT,
+  Name varchar(100),
+  Gender varchar(10),
+  Department varchar(20),
+  District varchar(20),
+  FatherName varchar(100),
+  Email varchar(100),
+  PRIMARY KEY(Roll)
+)`;
+
+db.query(sql, (err, data) => {
+    if (err) return console.log(err);
+    console.log(data);
+  });
+
 })
 
 app.post("/user", (req, res) => {
@@ -60,8 +80,8 @@ app.post("/user", (req, res) => {
 
 app.put("/user/:roll", (req, res) => {
   const Roll = req.params.roll;
-  const {name, email, gender, department, district, fatherName } = req.body;
-  
+  const { name, email, gender, department, district, fatherName } = req.body;
+
   const sql = `UPDATE students 
     SET Name = ?, Email = ?, Gender = ?, Department = ?, District = ?, FatherName = ?
     WHERE Roll = ?`;
@@ -72,7 +92,7 @@ app.put("/user/:roll", (req, res) => {
       return console.log(error);
     }
 
-    res.send({changedRows: result.changedRows});
+    res.send({ changedRows: result.changedRows });
   })
 })
 
