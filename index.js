@@ -29,6 +29,19 @@ app.get("/users", (req, res) => {
   });
 });
 
+// last one data
+app.get("/lastData", (req, res) => {
+  const sql = "SELECT Roll FROM students ORDER  BY Roll DESC LIMIT 1";
+
+  db.query(sql,(error, data) => {
+    if (error) {
+      return console.log(error);
+    }
+
+    res.send(data);
+  })
+})
+
 app.get("/user/:roll", (req, res) => {
   const Roll = req.params.roll;
 
@@ -42,33 +55,14 @@ app.get("/user/:roll", (req, res) => {
   })
 })
 
-app.post("/table", (req, res) => {
-  const sql = `CREATE TABLE students
-  (
-  Roll int AUTO_INCREMENT,
-  Name varchar(100),
-  Gender varchar(10),
-  Department varchar(20),
-  District varchar(20),
-  FatherName varchar(100),
-  Email varchar(100),
-  PRIMARY KEY(Roll)
-)`;
-
-db.query(sql, (err, data) => {
-    if (err) return console.log(err);
-    console.log(data);
-  });
-
-})
 
 app.post("/user", (req, res) => {
-  const { name, email, gender, department, district, fatherName } = req.body;
+  const {Roll, name, email, gender, department, district, fatherName } = req.body;
 
-  const sql = `INSERT INTO students (Name, Gender, Department, District, FatherName, Email)
-  VALUES (?, ?, ?, ?, ?,?)`;
+  const sql = `INSERT INTO students (Roll, Name, Gender, Department, District, FatherName, Email)
+  VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-  const values = [name, gender, department, district, fatherName, email];
+  const values = [Roll, name, gender, department, district, fatherName, email];
 
   db.query(sql, values, (error, data) => {
     if (error) {
